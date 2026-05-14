@@ -1,0 +1,8 @@
+Summary,Issue Type,Priority,Description,Epic Name,Assignee
+[SLN-CONS-001] Dual Login Consistency,Story,Highest,Gracefully handle same account on iPhone + iPad.,MOBILE VALIDATION,Agent 3
+[SLN-AUD-001] GSM Call Interruption,Story,Highest,Validate sync recovery after incoming calls.,MOBILE VALIDATION,Agent 2
+[SLN-PSY-001] Group Vibe Perception,Story,Highest,Measure perceived seek timing across users.,SYNC ENGINE TESTS,Agent 5
+[SLN-SYS-001] Memory Eviction Cold-Start,Story,High,Test app cold-booting into active session.,MOBILE VALIDATION,Agent 2
+[SLN-NET-001] Asymmetric Jitter Compensation,Story,Highest,Handle 500ms jitter between users.,SYNC ENGINE TESTS,Agent 1
+[SLN-LANE-001] Dynamic Listener List UI,Story,Highest,Implementation of real-time avatars in LaneScreen.,MOBILE VALIDATION,Agent 2
+[SLN-LANE-002] Recovery Heartbeat UI,Story,Highest,Implementation of synchronization pulsing overlay.,MOBILE VALIDATION,Agent 2

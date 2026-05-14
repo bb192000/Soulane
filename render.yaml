@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: soulane-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build --workspace=packages/sync-core && npm run build --workspace=apps/server
+    startCommand: npm run start --workspace=apps/server
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: REDIRECT_URI
+        sync: false
+      - key: FRONTEND_URL
+        value: https://soulane.web.app

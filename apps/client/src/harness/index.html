@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SyncWave Synchronization Observatory</title>
+  <style>
+    body { font-family: 'Courier New', Courier, monospace; background: #0a0a0a; color: #33ff33; margin: 20px; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .panel { border: 1px solid #333; padding: 15px; background: #111; box-shadow: 0 4px 6px rgba(0,0,0,0.5); }
+    h2 { color: #fff; margin-top: 0; font-size: 16px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    .log-feed { height: 250px; overflow-y: auto; font-size: 12px; line-height: 1.4; }
+    .controls { display: flex; flex-direction: column; gap: 10px; }
+    .controls button { background: #222; color: #fff; border: 1px solid #555; padding: 8px 12px; cursor: pointer; text-align: left; transition: 0.1s; }
+    .controls button:hover { background: #444; border-color: #777; }
+    .controls button:active { background: #666; }
+    .status { font-weight: bold; font-size: 20px; margin-bottom: 5px; }
+    .status.connected { color: #0f0; }
+    .status.reconnecting { color: #fa0; }
+    .status.disconnected { color: #f00; }
+    .metric { margin-bottom: 5px; }
+    .metric span { color: #fff; font-weight: bold; }
+    .drift-warning { color: #fa0 !important; }
+    .drift-danger { color: #f00 !important; }
+  </style>
+</head>
+<body>
+  <div style="margin-bottom: 20px;">
+    <h1 style="color: #fff; margin:0;">SyncWave Observatory Harness</h1>
+    <p style="color: #888; margin-top:5px;">Pure deterministic visibility. No UI rendering noise. No React lifecycle contamination.</p>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>1. Recovery Lifecycle & State</h2>
+      <div id="networkState" class="status disconnected">DISCONNECTED</div>
+      <div class="metric">Sync Domain: <span id="syncState">STALE</span></div>
+      <div class="metric">Authority Domain: <span id="authorityState">FOLLOWER</span></div>
+      <div class="metric">Version: <span id="versionState">0</span></div>
+      <div class="metric">Epoch: <span id="epochState">0</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Playhead Dimensionality</h2>
+      <div class="metric">Server (Authoritative Intent): <span id="serverPos">0.00</span>s</div>
+      <div class="metric">Ghost (Predicted Ideal): <span id="ghostPos">0.00</span>s</div>
+      <div class="metric">Physical (Actual SDK): <span id="physicalPos">0.00</span>s</div>
+      <div class="metric" style="margin-top:15px; font-size:16px; color:#aaa;">Drift Delta: <span id="driftDelta">0</span>ms</div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top: 20px;">
+    <div class="panel controls">
+      <h2>3. Network Chaos Controls (Physical Reality)</h2>
+      <button onclick="harness.simulateDisconnect()">🔴 Disconnect Socket (Tunnel / App Background)</button>
+      <button onclick="harness.simulateReconnect()">🟢 Reconnect Socket (Recovery Flow Trigger)</button>
+      <button onclick="harness.injectLatency(800)">🐌 Inject 800ms Network Latency</button>
+      <button onclick="harness.simulateSDKBuffering()">⚠️ Force SDK Buffering (Starvation)</button>
+      <button onclick="harness.simulateHardwareLag()">🔥 Force SDK Hardware Lag (1500ms Freeze)</button>
+    </div>
+
+    <div class="panel">
+      <h2>4. Reconciliation Decision Feed</h2>
+      <div id="decisionLog" class="log-feed"></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top: 20px;">
+    <h2>5. Event Stream Monitor (Protocol Layer)</h2>
+    <div id="eventLog" class="log-feed"></div>
+  </div>
+
+  <script src="./harness.js"></script>
+</body>
+</html>

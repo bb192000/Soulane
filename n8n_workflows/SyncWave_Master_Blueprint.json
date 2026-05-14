@@ -1,0 +1,44 @@
+{
+  "name": "SyncWave Master Implementation Blueprint",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "787c8008-0b5c-4903-8839-8260a9557685",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Step 1: Environment Bootstrapping\n- Fill .env secrets (Spotify Client ID/Secret)\n- Run `npx prisma migrate dev`\n- Ensure Redis is running locally"
+      },
+      "id": "1d8c19a2-4a7b-4b16-9d32-2d9d82123f11",
+      "name": "Bootstrap Instruction",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [440, 240]
+    },
+    {
+      "parameters": {
+        "content": "## Step 2: Empirical Testing (Phase 4)\n- Use `/auth/dev-login` for mock auth\n- Open Observability Dashboard\n- Run Screen Lock tests (A1, A2, A3)"
+      },
+      "id": "3a8c19a2-4a7b-4b16-9d32-2d9d82123f12",
+      "name": "Testing Instruction",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [680, 240]
+    },
+    {
+      "parameters": {
+        "content": "## Step 3: Product Realization (Phase 5)\n- Implement Spotify Playback Adapter (Real SDK)\n- Build 'Dome' sessions (Snapchat-style chat)\n- Implement Cross-Platform Capability Negotiation"
+      },
+      "id": "5a8c19a2-4a7b-4b16-9d32-2d9d82123f13",
+      "name": "Product Instruction",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [920, 240]
+    }
+  ],
+  "connections": {}
+}

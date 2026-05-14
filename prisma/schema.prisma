@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomRole {
+  HOST
+  DJ
+  LISTENER
+}
+
+enum RoomStatus {
+  ACTIVE
+  PAUSED
+  ENDED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  rooms          Room[]
+  members        RoomMember[]
+  sessions       Session[]
+  deviceSessions DeviceSession[]
+  messages       Message[]
+  reactions      Reaction[]
+  oauthProviders OAuthProvider[]
+}
+
+model Room {
+  id            String     @id @default(cuid())
+  name          String
+  hostId        String
+  status        RoomStatus @default(ACTIVE)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  endedAt       DateTime?
+  isPrivate     Boolean    @default(false)
+  
+  // Relations
+  host          User           @relation(fields: [hostId], references: [id])
+  members       RoomMember[]
+  messages      Message[]
+  playbackState PlaybackState?
+  queue         PlaybackQueue[]
+}
+
+model RoomMember {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  role      RoomRole @default(LISTENER)
+  joinedAt  DateTime @default(now())
+
+  // Relations
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+}
+
+model PlaybackState {
+  id                String   @id @default(cuid())
+  roomId            String   @unique
+  trackId           String?
+  position          Float    @default(0)
+  isPlaying         Boolean  @default(false)
+  playbackStartedAt DateTime?
+  playbackRate      Float    @default(1.0)
+  sourcePlatform    String?
+  hostTimestamp     BigInt?
+  version           Int      @default(1)
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  room              Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model PlaybackQueue {
+  id        String   @id @default(cuid())
+  roomId    String
+  trackId   String
+  addedById String
+  position  Int
+  createdAt DateTime @default(now())
+
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id               String   @id @default(cuid())
+  userId           String
+  sessionId        String   @unique
+  createdAt        DateTime @default(now())
+  expiresAt        DateTime
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OAuthProvider {
+  id                    String    @id @default(cuid())
+  userId                String
+  provider              String
+  providerUserId        String
+  encryptedRefreshToken String
+  scopes                String
+  expiresAt             DateTime?
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerUserId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  room      Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reactions Reaction[]
+
+  @@index([roomId, createdAt])
+}
+
+model Reaction {
+  id        String   @id @default(cuid())
+  roomId    String?
+  trackId   String?
+  messageId String?
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  message   Message? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DeviceSession {
+  id        String   @id @default(cuid())
+  userId    String
+  deviceId  String
+  isActive  Boolean  @default(true)
+  lastSeen  DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deviceId])
+}
