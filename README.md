@@ -1,4 +1,4 @@
-# SyncWave
+# Soulane
 
 Universal Cross-Platform Music Room
 
